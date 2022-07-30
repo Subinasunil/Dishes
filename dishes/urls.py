@@ -15,7 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-
+from disheitem.views import DishesView,DishDetailView
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('dishes/dishitems',DishesView.as_view()),
+    path('dishes/dishitem/<int:id>',DishDetailView.as_view())
 ]
