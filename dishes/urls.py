@@ -15,9 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from disheitem.views import DishesView,DishDetailView
+from disheitem.views import DishesView,DishDetailView,DishModelView,DishDetailModelView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('dishes/dishitems',DishesView.as_view()),
-    path('dishes/dishitem/<int:id>',DishDetailView.as_view())
+    path('dishes/dishitem/<int:id>',DishDetailView.as_view()),
+    path('api/v2/dishes/dishitems',DishModelView.as_view()),
+    path('api/v2/dishes/dishitem/<int:id>',DishDetailModelView.as_view())
 ]

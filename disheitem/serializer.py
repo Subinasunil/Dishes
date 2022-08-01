@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from disheitem.models import Dishes
 class DishSerializer(serializers.Serializer):
     id = serializers.CharField(read_only=True)
     name = serializers.CharField()
@@ -12,3 +13,9 @@ class DishSerializer(serializers.Serializer):
             raise serializers.ValidationError("invalid price")
         else:
             return data
+
+
+class DishModelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Dishes
+        fields="__all__"
