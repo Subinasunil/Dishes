@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from disheitem.models import Dishes
 from disheitem.serializer import DishSerializer,DishModelSerializer
 from rest_framework import status
+from rest_framework.viewsets import ViewSet
 class DishesView(APIView):
     def get(self,request,*args,**kwargs):
         qs=Dishes.objects.all()
@@ -86,4 +87,40 @@ class DishDetailModelView(APIView):
         id=kwargs.get("id")
         instance=Dishes.objects.get(id=id)
         instance.delete()
+        return Response({"msg":"deleted"},status=status.HTTP_204_NO_CONTENT)
+
+
+class DishViewsetView(ViewSet):
+    def list(self,request,*args,**kwargs):
+        qs=Dishes.objects.all()
+        serializer=DishModelSerializer(qs,many=True)
+        return Response(data=serializer.data)
+    def create(self,request,*args,**kwargs):
+        serializer=DishModelSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(data=serializer.data)
+        else:
+            return Response(data=serializer.errors)
+
+    def retrieve(self,request,*args,**kwargs):
+        id=kwargs.get("pk")
+        qs=Dishes.objects.get(id=id)
+        serialzer=DishModelSerializer(qs)
+        return Response(data=serialzer.data)
+
+    def update(self,request,*args,**kwargs):
+        id=kwargs.get("pk")
+        object=Dishes.objects.get(id=id)
+        serializer=DishModelSerializer(instance=object,data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(data=serializer.data)
+        else:
+            return Response(data=serializer.errors)
+
+    def destroy(self,request,*args,**kwargs):
+        id=kwargs.get("pk")
+        object=Dishes.objects.get(id=id)
+        object.delete()
         return Response({"msg":"deleted"},status=status.HTTP_204_NO_CONTENT)
